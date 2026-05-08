@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emotion Galaxy</title>
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+background:
+radial-gradient(circle at top left,#1c2457 0%,#050816 45%,#02030b 100%);
+color:white;
+overflow:hidden;
+}
+.stars{
+position:fixed;
+inset:0;
+background-image:
+radial-gradient(white 1px, transparent 1px);
+background-size:120px 120px;
+opacity:.5;
+pointer-events:none;
+}
+.app{
+max-width:430px;
+margin:auto;
+height:100vh;
+position:relative;
+padding:24px 18px 110px;
+overflow:auto;
+}
+.title{
+font-size:32px;
+font-weight:800;
+}
+.subtitle{
+margin-top:6px;
+color:#c6c9dd;
+font-size:15px;
+}
+.counter{
+position:absolute;
+top:24px;
+right:18px;
+padding:12px 20px;
+border-radius:999px;
+background:rgba(255,255,255,.08);
+border:1px solid rgba(255,255,255,.15);
+backdrop-filter:blur(20px);
+font-weight:700;
+}
+.card{
+margin-top:22px;
+padding:22px;
+border-radius:36px;
+background:linear-gradient(180deg,rgba(46,50,89,.92),rgba(22,24,48,.92));
+border:1px solid rgba(255,255,255,.12);
+backdrop-filter:blur(30px);
+box-shadow:0 10px 40px rgba(0,0,0,.35);
+}
+.card h2{
+font-size:24px;
+margin:0 0 12px;
+}
+.card p{
+color:#c5c9e2;
+line-height:1.6;
+}
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
+margin-top:20px;
+}
+.emotion{
+padding:18px;
+border-radius:24px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.12);
+cursor:pointer;
+transition:.2s;
+}
+.emotion.active{
+transform:translateY(-2px);
+background:rgba(255,255,255,.12);
+}
+.bar{
+height:14px;
+border-radius:999px;
+margin-bottom:14px;
+}
+.emotion h3{
+margin:0;
+font-size:18px;
+}
+textarea{
+margin-top:20px;
+width:100%;
+height:120px;
+border-radius:24px;
+padding:18px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.12);
+color:white;
+font-size:16px;
+resize:none;
+}
+.create-btn{
+margin-top:22px;
+width:100%;
+padding:20px;
+border:none;
+border-radius:999px;
+font-size:22px;
+font-weight:800;
+color:white;
+background:linear-gradient(90deg,#6d6bff,#b25cff);
+box-shadow:0 0 40px rgba(154,98,255,.4);
+cursor:pointer;
+}
+.small{
+margin-top:18px;
+font-size:14px;
+color:#c5c9e2;
+}
+.galaxy{
+height:620px;
+position:relative;
+margin-top:20px;
+}
+.orbit{
+position:absolute;
+left:50%;
+top:52%;
+transform:translate(-50%,-50%);
+border:1px solid rgba(255,255,255,.08);
+border-radius:50%;
+}
+.o1{width:220px;height:220px}
+.o2{width:340px;height:340px}
+.planet{
+position:absolute;
+width:78px;
+height:78px;
+border-radius:50%;
+box-shadow:
+0 0 30px rgba(255,255,255,.2),
+0 0 80px rgba(255,150,200,.28);
+border:2px solid rgba(255,255,255,.35);
+cursor:pointer;
+}
+.planet::after{
+content:'';
+position:absolute;
+inset:0;
+border-radius:50%;
+background:
+radial-gradient(circle at 30% 30%,rgba(255,255,255,.45),transparent 35%),
+radial-gradient(circle at 70% 80%,rgba(0,0,0,.35),transparent 45%);
+}
+.bottom-nav{
+position:fixed;
+bottom:12px;
+left:50%;
+transform:translateX(-50%);
+width:min(430px,92vw);
+display:flex;
+justify-content:space-around;
+padding:14px;
+border-radius:999px;
+background:rgba(7,9,24,.9);
+border:1px solid rgba(255,255,255,.1);
+backdrop-filter:blur(30px);
+}
+.nav-item{
+color:#d2d6ee;
+padding:14px 22px;
+border-radius:999px;
+font-weight:700;
+}
+.nav-item.active{
+background:white;
+color:black;
+}
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.5);
+display:none;
+align-items:center;
+justify-content:center;
+padding:18px;
+z-index:10;
+}
+.modal-content{
+width:100%;
+max-width:420px;
+padding:22px;
+border-radius:36px;
+background:linear-gradient(180deg,rgba(46,50,89,.97),rgba(18,20,40,.97));
+border:1px solid rgba(255,255,255,.12);
+position:relative;
+}
+.close{
+position:absolute;
+right:18px;
+top:18px;
+font-size:26px;
+cursor:pointer;
+}
+.big-planet{
+width:280px;
+height:280px;
+margin:26px auto;
+border-radius:50%;
+position:relative;
+box-shadow:
+0 0 40px rgba(255,140,180,.35),
+0 0 120px rgba(255,100,150,.25);
+border:2px solid rgba(255,255,255,.35);
+}
+.big-planet::after{
+content:'';
+position:absolute;
+inset:0;
+border-radius:50%;
+background:
+radial-gradient(circle at 35% 35%,rgba(255,255,255,.35),transparent 35%),
+radial-gradient(circle at 70% 80%,rgba(0,0,0,.45),transparent 50%);
+}
+.actions{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+}
+.action{
+padding:18px;
+border-radius:24px;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.1);
+font-weight:700;
+}
+</style>
+</head>
+<body>
+
+<div class="stars"></div>
+
+<div class="app">
+<div class="title">토닥토닥해조</div>
+<div class="subtitle">감정을 행성으로 기록하는 내면 우주</div>
+<div class="counter">행성 7개</div>
+
+<div class="card">
+<h2>오늘의 감정 행성 만들기</h2>
+<p>감정 키워드 1~4개를 선택하면 색채 심리학 기반으로 하나의 행성이 생성됩니다.</p>
+
+<div class="grid">
+<div class="emotion" onclick="toggle(this)">
+<div class="bar" style="background:#68a7ff"></div>
+<h3>불안</h3>
+<p>차가운 청색</p>
+</div>
+
+<div class="emotion" onclick="toggle(this)">
+<div class="bar" style="background:#8b84ff"></div>
+<h3>긴장</h3>
+<p>인디고</p>
+</div>
+
+<div class="emotion" onclick="toggle(this)">
+<div class="bar" style="background:#6fe3b4"></div>
+<h3>평온</h3>
+<p>녹색</p>
+</div>
+
+<div class="emotion" onclick="toggle(this)">
+<div class="bar" style="background:#f3de7b"></div>
+<h3>행복</h3>
+<p>노란빛</p>
+</div>
+
+<div class="emotion" onclick="toggle(this)">
+<div class="bar" style="background:#ff7676"></div>
+<h3>분노</h3>
+<p>강한 적색</p>
+</div>
+
+<div class="emotion" onclick="toggle(this)">
+<div class="bar" style="background:#c084ff"></div>
+<h3>외로움</h3>
+<p>보라빛</p>
+</div>
+</div>
+
+<textarea placeholder="오늘의 상황이나 마음을 짧게 적어보세요."></textarea>
+
+<button class="create-btn" onclick="showModal()">감정 행성 생성하기</button>
+
+<div class="small">
+생성 버튼을 누르면 감정 키워드가 색채 입자로 분해되고,
+색이 섞이며 행성으로 태어나는 과정을 볼 수 있어요.
+</div>
+</div>
+
+<div class="card">
+<h2>My Emotional Galaxy</h2>
+<p>행성을 길게 누르거나 드래그하면 궤도 위에서 위치를 옮길 수 있어요.</p>
+
+<div class="galaxy">
+<div class="orbit o1"></div>
+<div class="orbit o2"></div>
+
+<div class="planet" onclick="openVillage(this)" style="left:42%;top:18%;
+background:linear-gradient(135deg,#ff8aa0,#a68cff)"></div>
+
+<div class="planet" onclick="openVillage(this)" style="left:58%;top:28%;
+background:linear-gradient(135deg,#73b6ff,#7a7cff)"></div>
+
+<div class="planet" onclick="openVillage(this)" style="left:65%;top:45%;
+background:linear-gradient(135deg,#6fe3b4,#f3de7b)"></div>
+
+<div class="planet" onclick="openVillage(this)" style="left:56%;top:64%;
+background:linear-gradient(135deg,#7bc0ff,#b78cff)"></div>
+
+<div class="planet" onclick="openVillage(this)" style="left:34%;top:54%;
+background:linear-gradient(135deg,#6fe3b4,#ffc0d4)"></div>
+
+<div class="planet" onclick="openVillage(this)" style="left:26%;top:38%;
+background:linear-gradient(135deg,#ff8aa0,#ff7676)"></div>
+
+</div>
+</div>
+</div>
+
+<div class="bottom-nav">
+<div class="nav-item active">생성</div>
+<div class="nav-item">은하</div>
+<div class="nav-item">리포트</div>
+<div class="nav-item">타임라인</div>
+</div>
+
+<div class="modal" id="modal">
+<div class="modal-content">
+<div class="close" onclick="closeModal()">×</div>
+
+<h2>분노 · 긴장 행성 마을</h2>
+<p>색채로 생성된 감정 행성을 확대해 쉼터, 나무, 호수, 등불로 가꾸는 공간입니다.</p>
+
+<div class="big-planet" style="background:linear-gradient(135deg,#f48ba0,#9f8cff)">
+</div>
+
+<h2>이 행성을 어떻게 가꿀까요?</h2>
+<p>행동을 누르면 마을 오브젝트가 추가되고, 행성이 성장합니다.</p>
+
+<div class="actions">
+<div class="action">🏠 감정 쉼터 짓기</div>
+<div class="action">🌳 회복 나무 심기</div>
+<div class="action">💧 마음 호수 만들기</div>
+<div class="action">✨ 위로 등불 켜기</div>
+</div>
+
+</div>
+</div>
+
+<script>
+function toggle(el){
+el.classList.toggle('active');
+}
+
+function showModal(){
+document.getElementById('modal').style.display='flex';
+}
+
+function closeModal(){
+document.getElementById('modal').style.display='none';
+}
+
+function openVillage(el){
+document.getElementById('modal').style.display='flex';
+}
+</script>
+
+</body>
+</html>
