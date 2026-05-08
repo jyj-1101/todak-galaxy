@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>토닥토닥해조 - Screenshot Style</title>
+<style>
+*{box-sizing:border-box}
+:root{--bg:#030613;--card:#25283a;--line:rgba(255,255,255,.15);--muted:#b8bdd2}
+body{margin:0;background:radial-gradient(circle at 15% 0,#283262 0,transparent 35%),#030613;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo",sans-serif;overflow:hidden}
+body:before{content:"";position:fixed;inset:0;background-image:radial-gradient(#fff 1.2px,transparent 1.2px);background-size:120px 170px;opacity:.55;pointer-events:none}
+.phone{width:min(430px,100vw);height:100vh;margin:0 auto;position:relative;overflow:hidden}
+.page{height:100%;overflow:auto;padding:28px 22px 104px;display:none}
+.page.active{display:block}
+h1{margin:0;font-size:36px;line-height:1.05;font-weight:900;letter-spacing:-.06em}
+.sub{margin:8px 0 0;color:var(--muted);font-size:16px;line-height:1.55;font-weight:600}
+.badge{position:absolute;right:22px;top:28px;padding:13px 20px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--line);font-weight:800}
+.card{margin-top:24px;padding:22px 18px;background:linear-gradient(180deg,rgba(45,48,70,.94),rgba(28,30,46,.94));border:1px solid var(--line);border-radius:32px;box-shadow:0 30px 90px rgba(0,0,0,.38)}
+.card h2{margin:0;font-size:24px;letter-spacing:-.04em}
+.card p{margin:12px 0 0;color:var(--muted);font-size:16px;line-height:1.7;font-weight:600}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+.emotion{min-height:94px;border-radius:22px;padding:16px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.14);cursor:pointer;transition:.18s}
+.emotion.active{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.38);transform:translateY(-2px)}
+.swatch{height:14px;border-radius:999px;margin-bottom:13px}
+.emotion b{display:block;font-size:20px;letter-spacing:-.05em}.emotion span{display:block;margin-top:5px;color:#b9bdd2;font-size:14px;font-weight:700}
+textarea{width:100%;height:120px;margin-top:18px;resize:none;border:1px solid rgba(255,255,255,.14);border-radius:24px;background:rgba(255,255,255,.055);padding:18px;color:white;font-size:16px;outline:none}
+textarea::placeholder{color:rgba(255,255,255,.38)}
+.primary{width:100%;margin-top:18px;border:0;border-radius:999px;padding:20px 22px;color:white;font-size:20px;font-weight:900;background:linear-gradient(90deg,#7065ff,#b154f7);box-shadow:0 18px 45px rgba(145,88,255,.35);cursor:pointer}
+.hint{font-size:14px!important;color:#b8bbcc!important;margin-top:17px!important}
+.galaxy-card{height:650px;position:relative;overflow:hidden}
+.orbit-wrap{position:absolute;left:50%;top:56%;transform:translate(-50%,-50%);width:340px;height:340px}
+.orbit{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:1px solid rgba(255,255,255,.065);border-radius:50%}
+.o1{width:120px;height:120px}.o2{width:210px;height:210px}.o3{width:310px;height:310px}
+.planet{position:absolute;width:58px;height:58px;border-radius:50%;background:var(--pbg);border:2px solid rgba(255,255,255,.35);box-shadow:0 0 20px rgba(255,255,255,.16),0 0 44px var(--glow),inset -10px -12px 18px rgba(0,0,0,.25);cursor:grab;z-index:3}
+.planet:after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 28% 26%,rgba(255,255,255,.45),transparent 29%),radial-gradient(circle at 72% 78%,rgba(0,0,0,.33),transparent 48%)}
+.planet:before{content:"";position:absolute;inset:-12px;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 60%);opacity:.24;filter:blur(5px);z-index:-1}
+.p1{left:36%;top:57%;--pbg:linear-gradient(135deg,#ff7d94,#b58bff);--glow:#ff8198}.p2{left:55%;top:47%;--pbg:linear-gradient(135deg,#76a8ff,#856dff);--glow:#76a8ff}.p3{left:64%;top:58%;--pbg:linear-gradient(135deg,#74dfb4,#f5df83);--glow:#74dfb4}.p4{left:50%;top:70%;--pbg:linear-gradient(135deg,#77b4ff,#a16dff);--glow:#77b4ff}.p5{left:32%;top:68%;--pbg:linear-gradient(135deg,#72e0b4,#f0bad2);--glow:#72e0b4}.p6{left:23%;top:57%;--pbg:linear-gradient(135deg,#ff8398,#ff6f76);--glow:#ff6f76}
+.nav{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);width:min(390px,92vw);height:72px;padding:8px;border-radius:999px;background:rgba(5,7,22,.92);border:1px solid rgba(255,255,255,.12);display:grid;grid-template-columns:repeat(4,1fr);gap:6px;z-index:15}
+.nav button{border:0;background:transparent;color:#b9bdd2;font-weight:900;font-size:15px;border-radius:999px;cursor:pointer}.nav button.active{background:white;color:#111}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.58);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}.modal.show{display:flex}
+.modal-box{width:min(390px,94vw);max-height:92vh;overflow:auto;background:linear-gradient(180deg,rgba(42,45,68,.98),rgba(23,25,40,.98));border:1px solid rgba(255,255,255,.17);border-radius:34px;padding:24px 18px 22px;box-shadow:0 30px 100px rgba(0,0,0,.55);position:relative}
+.close{position:absolute;right:18px;top:16px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.09);color:white;font-size:28px;font-weight:800;cursor:pointer}
+.big-title{font-size:30px;font-weight:900;letter-spacing:-.05em;margin:8px 0 8px}
+.bigplanet{width:280px;height:280px;border-radius:50%;margin:30px auto 26px;background:radial-gradient(circle at 32% 30%,rgba(255,255,255,.32),transparent 30%),linear-gradient(135deg,#ff7f96 0%,#b17dcb 52%,#6577cd 100%);border:2px solid rgba(255,255,255,.32);box-shadow:0 0 48px rgba(255,111,118,.45),0 0 120px rgba(255,111,118,.22),inset -28px -34px 36px rgba(0,0,0,.28);position:relative}
+.steps{margin:0 auto 20px;padding:18px;border-radius:24px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.055);color:#d7dae8;line-height:1.8;font-weight:800;font-size:15px}
+.save-btn{display:block;margin:20px auto 4px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(255,255,255,.08);color:white;padding:16px 26px;font-size:18px;font-weight:900;cursor:pointer}
+.village-planet{width:310px;height:310px;margin:20px auto 22px;border-radius:50%;background:radial-gradient(circle at 35% 28%,rgba(255,255,255,.26),transparent 31%),linear-gradient(135deg,#f27b91,#9b87d7 55%,#5c6fb5);box-shadow:0 0 70px rgba(255,111,118,.38),inset -30px -36px 40px rgba(0,0,0,.33);border:2px solid rgba(255,255,255,.32);position:relative}
+.village-planet .lake{position:absolute;left:50%;bottom:38px;transform:translateX(-50%);width:150px;height:56px;border-radius:50%;background:rgba(120,180,240,.45);border:1px dashed rgba(255,255,255,.28)}.village-planet .house{position:absolute;left:50%;top:98px;transform:translateX(-50%);font-size:42px;filter:drop-shadow(0 0 14px rgba(255,210,130,.55))}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.action{padding:17px 14px;border-radius:22px;background:rgba(255,255,255,.065);border:1px solid rgba(255,255,255,.14);font-weight:900;line-height:1.45}.action span{display:block;color:#b9bdd2;font-size:13px;font-weight:700;margin-top:5px}
+.stat{display:flex;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);padding:16px 0;color:#dfe3f3;font-weight:800}.timeline-item{padding:18px;border-radius:22px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);margin-top:14px}
+</style>
+</head>
+<body>
+<div class="phone">
+<section id="create" class="page active"><h1>토닥토닥해조</h1><div class="sub">감정을 행성으로 기록하는 내면 우주</div><div class="badge">행성 <span id="count">6</span>개</div>
+<div class="card"><h2>오늘의 감정 행성 만들기</h2><p>감정 키워드 1~4개를 선택하면 색채 심리학 기반으로 하나의 행성이 생성됩니다.</p>
+<div class="grid">
+<div class="emotion" onclick="toggleEmotion(this)"><div class="swatch" style="background:#68a7ff"></div><b>불안</b><span>차가운 청색</span></div>
+<div class="emotion" onclick="toggleEmotion(this)"><div class="swatch" style="background:#8b84ff"></div><b>긴장</b><span>인디고</span></div>
+<div class="emotion" onclick="toggleEmotion(this)"><div class="swatch" style="background:#6fe3b4"></div><b>평온</b><span>녹색</span></div>
+<div class="emotion" onclick="toggleEmotion(this)"><div class="swatch" style="background:#f3de7b"></div><b>행복</b><span>노란빛</span></div>
+<div class="emotion" onclick="toggleEmotion(this)"><div class="swatch" style="background:#ff7676"></div><b>분노</b><span>강한 적색</span></div>
+<div class="emotion" onclick="toggleEmotion(this)"><div class="swatch" style="background:#c084ff"></div><b>외로움</b><span>보라빛</span></div>
+<div class="emotion" onclick="toggleEmotion(this)"><div class="swatch" style="background:#9ba4b6"></div><b>무기력</b><span>회색빛</span></div>
+<div class="emotion" onclick="toggleEmotion(this)"><div class="swatch" style="background:#f49ac9"></div><b>설렘</b><span>분홍빛</span></div>
+</div><textarea placeholder="오늘의 상황이나 마음을 짧게 적어보세요."></textarea><button class="primary" onclick="openGen()">감정 행성 생성하기</button><p class="hint">생성 버튼을 누르면 감정 키워드가 색채 입자로 분해되고, 색이 섞이며 행성으로 태어나는 과정을 볼 수 있어요.</p></div></section>
+<section id="galaxy" class="page"><h1>토닥토닥해조</h1><div class="sub">감정을 행성으로 기록하는 내면 우주</div><div class="badge">행성 <span id="count2">6</span>개</div>
+<div class="card galaxy-card"><h2>My Emotional Galaxy</h2><p>행성을 길게 누르거나 드래그하면 궤도 위에서 위치를 옮길 수 있어요.<br>행성끼리는 겹치지 않게 자동 보정됩니다.</p><div class="orbit-wrap"><div class="orbit o1"></div><div class="orbit o2"></div><div class="orbit o3"></div></div><div class="planet p1" onclick="openVillage()"></div><div class="planet p2" onclick="openVillage()"></div><div class="planet p3" onclick="openVillage()"></div><div class="planet p4" onclick="openVillage()"></div><div class="planet p5" onclick="openVillage()"></div><div class="planet p6" onclick="openVillage()"></div></div></section>
+<section id="report" class="page"><h1>리포트</h1><div class="sub">1주/1달 단위 감정 패턴 분석</div><div class="card"><h2>이번 주 감정 통계</h2><div class="stat"><span>가장 많이 등장한 감정</span><b>긴장</b></div><div class="stat"><span>감정 기록 수</span><b>7회</b></div><div class="stat"><span>평균 감정 조합</span><b>2.8개</b></div><p>최근 긴장과 불안이 반복적으로 등장하고 있어요. 반복되는 감정은 마음이 보내는 패턴 신호일 수 있습니다.</p></div></section>
+<section id="timeline" class="page"><h1>타임라인</h1><div class="sub">감정 행성이 생성된 순서대로 흐름을 확인합니다.</div><div class="card"><h2>은하 타임라인</h2><div class="timeline-item">5/8 · 분노 + 긴장 행성 생성</div><div class="timeline-item">5/6 · 평온 + 설렘 행성 생성</div><div class="timeline-item">5/3 · 무기력 + 외로움 행성 생성</div></div></section>
+<nav class="nav"><button class="active" onclick="showPage('create',this)">생성</button><button onclick="showPage('galaxy',this)">은하</button><button onclick="showPage('report',this)">리포트</button><button onclick="showPage('timeline',this)">타임라인</button></nav></div>
+<div id="genModal" class="modal"><div class="modal-box"><button class="close" onclick="closeGen()">×</button><div class="big-title">감정 행성 생성 중</div><p class="sub">선택한 감정이 색채 입자로 변환되고, 서로 섞이며 하나의 행성으로 태어납니다.</p><div class="bigplanet"></div><div class="steps">① 감정 키워드를 읽어 색채 신호로 변환합니다.<br>② 복수 감정의 색을 섞어 오늘의 정서 비율을 만듭니다.<br>③ 혼합된 색채가 행성의 표면과 분위기로 형성됩니다.</div><button class="save-btn" onclick="savePlanet()">바로 은하에 저장하기</button></div></div>
+<div id="villageModal" class="modal"><div class="modal-box"><button class="close" onclick="closeVillage()">×</button><div class="big-title">분노 · 긴장 행성 마을</div><p class="sub">색채로 생성된 감정 행성을 확대해 쉼터, 나무, 호수, 등불로 가꾸는 공간입니다.</p><div class="village-planet"><div class="house">🏠</div><div class="lake"></div></div><h2>이 행성을 어떻게 가꿀까요?</h2><p class="sub">행동을 누르면 마을 오브젝트가 추가되고, 행성이 성장합니다.</p><div class="actions"><div class="action">🏠 감정 쉼터 짓기<span>오늘의 감정을 안전하게 보관해요.</span></div><div class="action">🌳 회복 나무 심기<span>회복 루틴을 하나 더해요.</span></div><div class="action">💧 마음 호수 만들기<span>감정을 가라앉히는 공간을 만들어요.</span></div><div class="action">✨ 위로 등불 켜기<span>오늘 나에게 필요한 말을 밝혀요.</span></div></div></div></div>
+<script>
+let planetCount=6;
+function toggleEmotion(el){el.classList.toggle('active')}
+function openGen(){document.getElementById('genModal').classList.add('show')}
+function closeGen(){document.getElementById('genModal').classList.remove('show')}
+function savePlanet(){planetCount++;document.getElementById('count').textContent=planetCount;document.getElementById('count2').textContent=planetCount;closeGen();showPage('galaxy',document.querySelectorAll('.nav button')[1])}
+function openVillage(){document.getElementById('villageModal').classList.add('show')}
+function closeVillage(){document.getElementById('villageModal').classList.remove('show')}
+function showPage(id,btn){document.querySelectorAll('.page').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+</script>
+</body>
+</html>
