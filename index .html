@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Emotional Galaxy</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 30% 20%, #1f2a60 0%, #0a1026 45%, #040613 100%);
+      color: #fff;
+      min-height: 100vh;
+    }
+    .app {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      letter-spacing: -0.04em;
+    }
+    .subtitle {
+      margin: 8px 0 0;
+      color: #aab4d6;
+      font-size: 15px;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 20px;
+      backdrop-filter: blur(16px);
+    }
+    .tabs button, .primary, .ghost {
+      border: 0;
+      cursor: pointer;
+      border-radius: 15px;
+      padding: 12px 16px;
+      color: white;
+      background: rgba(255,255,255,.09);
+      font-weight: 700;
+    }
+    .tabs button.active {
+      background: linear-gradient(135deg, #8a7cff, #5b78ff);
+      box-shadow: 0 10px 28px rgba(91,120,255,.35);
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 18px;
+    }
+    .card {
+      background: rgba(10, 17, 40, .76);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 28px;
+      box-shadow: 0 24px 70px rgba(0,0,0,.35);
+      backdrop-filter: blur(18px);
+    }
+    aside.card {
+      padding: 22px;
+      height: fit-content;
+    }
+    .emotion-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .emotion {
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.06);
+      color: white;
+      border-radius: 20px;
+      padding: 13px;
+      cursor: pointer;
+      text-align: left;
+      transition: .2s;
+    }
+    .emotion.active {
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,.45);
+      background: rgba(255,255,255,.16);
+    }
+    .swatch {
+      height: 14px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+    textarea {
+      width: 100%;
+      height: 110px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255,255,255,.06);
+      color: white;
+      resize: none;
+      outline: none;
+    }
+    .primary {
+      width: 100%;
+      margin-top: 12px;
+      padding: 15px;
+      background: linear-gradient(135deg, #7168ff, #9b6dff);
+      box-shadow: 0 12px 30px rgba(116,101,255,.36);
+    }
+    .main {
+      min-height: 720px;
+      position: relative;
+      overflow: hidden;
+    }
+    .screen { display: none; padding: 24px; }
+    .screen.active { display: block; }
+
+    /* Galaxy */
+    .galaxy {
+      height: 670px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 50% 48%, rgba(126,99,255,.35), transparent 18%),
+        radial-gradient(circle at 35% 30%, rgba(91,164,255,.18), transparent 25%),
+        radial-gradient(circle at 70% 70%, rgba(255,120,190,.15), transparent 25%),
+        #060916;
+    }
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      opacity: .8;
+    }
+    .orbit {
+      position: absolute;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 50%;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%) rotate(-8deg);
+    }
+    .o1 { width: 260px; height: 140px; }
+    .o2 { width: 480px; height: 260px; }
+    .o3 { width: 700px; height: 380px; }
+
+    .planet-wrap {
+      position: absolute;
+      width: 78px;
+      height: 78px;
+      cursor: grab;
+      touch-action: none;
+      z-index: 5;
+    }
+    .planet {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 0 28px var(--glow), inset -12px -18px 28px rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.22);
+    }
+    .planet::before {
+      content: "";
+      position: absolute;
+      inset: -10%;
+      background:
+        radial-gradient(circle at 28% 22%, rgba(255,255,255,.7), transparent 16%),
+        radial-gradient(circle at 60% 36%, rgba(255,255,255,.25), transparent 12%),
+        repeating-linear-gradient(155deg, rgba(255,255,255,.12) 0 5px, transparent 5px 14px);
+      mix-blend-mode: screen;
+      opacity: .75;
+    }
+    .planet::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 70% 75%, transparent 45%, rgba(0,0,0,.42) 100%);
+    }
+    .ring {
+      position: absolute;
+      width: 118px;
+      height: 34px;
+      border: 2px solid rgba(255,221,166,.62);
+      border-left-color: rgba(255,255,255,.08);
+      border-bottom-color: rgba(255,255,255,.16);
+      border-radius: 50%;
+      left: -20px;
+      top: 22px;
+      transform: rotate(-18deg);
+      z-index: 2;
+      pointer-events: none;
+      box-shadow: 0 0 12px rgba(255,210,150,.25);
+    }
+    .planet-label {
+      position: absolute;
+      top: 85px;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 12px;
+      color: #dbe4ff;
+      background: rgba(0,0,0,.35);
+      padding: 4px 8px;
+      border-radius: 999px;
+      opacity: 0;
+      transition: .2s;
+    }
+    .planet-wrap:hover .planet-label { opacity: 1; }
+
+    .side-panel {
+      position: absolute;
+      right: 22px;
+      bottom: 22px;
+      width: 330px;
+      padding: 18px;
+      background: rgba(5, 8, 20, .78);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 24px;
+      backdrop-filter: blur(16px);
+      z-index: 10;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0; }
+    .chip { padding: 6px 10px; background: rgba(255,255,255,.1); border-radius: 999px; font-size: 12px; }
+
+    /* Village */
+    .village {
+      min-height: 670px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(255,221,150,.18), transparent 35%),
+        linear-gradient(#121a3d, #07101e);
+    }
+    .floating-island {
+      position: absolute;
+      left: 50%;
+      bottom: 42px;
+      transform: translateX(-50%);
+      width: 660px;
+      height: 410px;
+      background: linear-gradient(#31495b, #1d2b3a 64%, #0f1726);
+      border-radius: 48% 48% 28% 28%;
+      box-shadow: 0 26px 80px rgba(0,0,0,.55), inset 0 22px 25px rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.13);
+    }
+    .pond {
+      position: absolute;
+      left: 50%;
+      bottom: 98px;
+      transform: translateX(-50%);
+      width: 220px;
+      height: 100px;
+      background: radial-gradient(circle at 50% 35%, #8dd6ff, #376caa 70%);
+      border-radius: 50%;
+      box-shadow: 0 0 38px rgba(117,200,255,.35);
+      border: 1px solid rgba(255,255,255,.25);
+    }
+    .house {
+      position: absolute;
+      left: 50%;
+      bottom: 230px;
+      transform: translateX(-50%);
+      width: 150px;
+      height: 112px;
+      background: linear-gradient(#67518c, #433766);
+      border-radius: 18px 18px 10px 10px;
+      box-shadow: 0 0 35px rgba(255,210,125,.35);
+      border: 1px solid rgba(255,255,255,.18);
+    }
+    .house::before {
+      content: "";
+      position: absolute;
+      left: -14px;
+      top: -48px;
+      width: 178px;
+      height: 72px;
+      background: linear-gradient(135deg, #7b68aa, #372c58);
+      clip-path: polygon(50% 0, 100% 75%, 0 75%);
+      border-radius: 12px;
+    }
+    .door {
+      position: absolute;
+      width: 34px;
+      height: 50px;
+      bottom: 0;
+      left: 58px;
+      background: #2c2340;
+      border-radius: 16px 16px 4px 4px;
+    }
+    .window {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      background: #ffd982;
+      border-radius: 7px;
+      top: 34px;
+      box-shadow: 0 0 22px #ffd982;
+    }
+    .w1 { left: 22px; } .w2 { right: 22px; }
+    .tree {
+      position: absolute;
+      width: 76px;
+      height: 76px;
+      background: radial-gradient(circle at 35% 25%, #5b8558, #243f2e);
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(150,255,180,.12);
+    }
+    .tree::after {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 50px;
+      background: #6e4b34;
+      left: 32px;
+      bottom: -38px;
+      border-radius: 10px;
+    }
+    .t1 { left: 140px; bottom: 260px; }
+    .t2 { right: 145px; bottom: 250px; }
+    .t3 { left: 90px; bottom: 140px; transform: scale(.8); }
+    .bench {
+      position: absolute;
+      width: 95px;
+      height: 18px;
+      background: #9a6b45;
+      border-radius: 10px;
+      right: 165px;
+      bottom: 170px;
+      box-shadow: 0 12px 0 #6c4a32;
+    }
+    .lamp {
+      position: absolute;
+      width: 8px;
+      height: 76px;
+      background: #5f4a3b;
+      right: 118px;
+      bottom: 155px;
+      border-radius: 8px;
+    }
+    .lamp::before {
+      content: "";
+      position: absolute;
+      left: -14px;
+      top: -22px;
+      width: 36px;
+      height: 36px;
+      background: #ffd77c;
+      border-radius: 50%;
+      box-shadow: 0 0 30px #ffd77c;
+    }
+    .shop {
+      position: absolute;
+      right: 26px;
+      top: 26px;
+      width: 250px;
+      padding: 16px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 24px;
+      backdrop-filter: blur(16px);
+    }
+    .shop-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .shop button {
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.07);
+      color: white;
+      cursor: pointer;
+    }
+    .report-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .stat {
+      padding: 20px;
+      border-radius: 24px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.1);
+    }
+    .bar { height: 10px; background: rgba(255,255,255,.08); border-radius: 999px; overflow: hidden; margin: 10px 0 16px; }
+    .fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg,#8a7cff,#ff93c7); }
+    @media (max-width: 900px) {
+      body { overflow:auto; }
+      .layout { grid-template-columns: 1fr; }
+      header { flex-direction: column; align-items: flex-start; }
+      .main, .galaxy, .village { min-height: 620px; }
+      .side-panel { position: relative; right:auto; bottom:auto; margin: 16px; width:auto; }
+      .floating-island { width: 92%; transform: translateX(-50%) scale(.82); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>My Emotional Galaxy</h1>
+        <p class="subtitle">감정을 행성으로 만들고, 은하와 마을로 가꾸는 워킹 프로토타입</p>
+      </div>
+      <nav class="tabs">
+        <button class="active" data-view="galaxy">은하</button>
+        <button data-view="village">행성 가꾸기</button>
+        <button data-view="report">패턴 리포트</button>
+        <button data-view="letter">회고 편지</button>
+      </nav>
+    </header>
+
+    <div class="layout">
+      <aside class="card">
+        <h2>오늘의 감정 선택</h2>
+        <p class="subtitle">감정 1~4개를 선택하면 스토리보드풍 행성이 생성됩니다.</p>
+        <div class="emotion-grid" id="emotionGrid"></div>
+        <textarea id="journal" placeholder="오늘의 마음을 짧게 기록해보세요."></textarea>
+        <button class="primary" id="createBtn">감정 행성 생성하기</button>
+      </aside>
+
+      <main class="main card">
+        <section id="galaxy" class="screen active">
+          <h2>My Emotional Galaxy</h2>
+          <p class="subtitle">행성은 드래그해서 원하는 궤도 위에 배치할 수 있어요.</p>
+          <div class="galaxy" id="galaxyArea">
+            <div class="orbit o1"></div><div class="orbit o2"></div><div class="orbit o3"></div>
+            <div id="planetLayer"></div>
+            <div class="side-panel" id="planetInfo">
+              <h3>행성을 선택해보세요</h3>
+              <p class="subtitle">선택한 감정 조합, 기록, 진화 단계를 확인할 수 있습니다.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="village" class="screen">
+          <h2>행성 가꾸기</h2>
+          <p class="subtitle">스토리보드 속 마을처럼, 내 감정 행성을 작고 따뜻한 공간으로 가꿉니다.</p>
+          <div class="village">
+            <div class="floating-island"></div>
+            <div class="pond"></div>
+            <div class="house"><div class="door"></div><div class="window w1"></div><div class="window w2"></div></div>
+            <div class="tree t1"></div><div class="tree t2"></div><div class="tree t3"></div>
+            <div class="bench"></div><div class="lamp"></div>
+            <div class="shop">
+              <h3>꾸미기 상점</h3>
+              <div class="shop-grid">
+                <button onclick="decorate('쉼터')">쉼터 추가</button>
+                <button onclick="decorate('조명')">조명 켜기</button>
+                <button onclick="decorate('나무')">나무 심기</button>
+                <button onclick="decorate('회고')">회고 편지</button>
+              </div>
+              <p class="subtitle" id="decorateMsg">마을을 가꾸면 행성 진화도가 올라갑니다.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="report" class="screen">
+          <h2>감정 패턴 분석 리포트</h2>
+          <p class="subtitle">최근 기록을 바탕으로 감정 흐름을 요약합니다.</p>
+          <div class="report-grid">
+            <div class="stat"><p class="subtitle">기록 수</p><h2 id="countStat">0</h2></div>
+            <div class="stat"><p class="subtitle">주요 감정</p><h2 id="mainStat">-</h2></div>
+            <div class="stat"><p class="subtitle">진화도</p><h2 id="careStat">Lv.1</h2></div>
+          </div>
+          <div class="stat" style="margin-top:18px;">
+            <h3>감정 비율</h3>
+            <div id="bars"></div>
+            <p id="reportText" class="subtitle"></p>
+          </div>
+        </section>
+
+        <section id="letter" class="screen">
+          <h2>AI 회고 편지</h2>
+          <div class="stat" style="margin-top:18px; max-width:720px;">
+            <p class="subtitle">오늘의 나에게 보내는 편지</p>
+            <h3 id="letterTitle">아직 생성된 행성이 없어요.</h3>
+            <p id="letterText" style="line-height:1.9; color:#e7ebff;">감정 행성을 만들면 회고 편지가 생성됩니다.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+<script>
+const meta = {
+  '기쁨': ['#ffe08a','#ff8fa3','#6b58d6'],
+  '평온': ['#b8ffd8','#5abf99','#315c8d'],
+  '불안': ['#9ed0ff','#6475ff','#4c2b83'],
+  '슬픔': ['#b8ccff','#4b6cb7','#1b274a'],
+  '분노': ['#ffb16f','#ff5a68','#661f2e'],
+  '피로감': ['#ffd0a0','#8b6f9e','#39415f'],
+  '외로움': ['#ebb7ff','#8a65d6','#342056'],
+  '무기력': ['#cfd5df','#7d8495','#303545']
+};
+let selected = [];
+let planets = [
+  { emotions:['불안','피로감'], journal:'오늘은 머리가 복잡하고 몸이 무거웠다.', x:46, y:43, care:2 },
+  { emotions:['평온'], journal:'산책 후 조금 진정됐다.', x:20, y:28, care:1 },
+  { emotions:['분노','피로감'], journal:'예상치 못한 일 때문에 예민했다.', x:72, y:55, care:1 }
+];
+let activePlanet = planets[0];
+let dragTarget = null;
+let offset = {x:0,y:0};
+
+const emotionGrid = document.getElementById('emotionGrid');
+Object.keys(meta).forEach(e => {
+  const btn = document.createElement('button');
+  btn.className = 'emotion';
+  btn.innerHTML = `<div class="swatch" style="background:linear-gradient(90deg,${meta[e].join(',')})"></div><b>${e}</b>`;
+  btn.onclick = () => {
+    if(selected.includes(e)) selected = selected.filter(v=>v!==e);
+    else if(selected.length < 4) selected.push(e);
+    btn.classList.toggle('active');
+  };
+  emotionGrid.appendChild(btn);
+});
+
+function planetBg(p){
+  const colors = p.emotions.flatMap(e => meta[e] || meta['평온']);
+  return `radial-gradient(circle at 30% 25%, rgba(255,255,255,.55) 0%, transparent 16%),
+          radial-gradient(circle at 35% 35%, ${colors.join(', ')})`;
+}
+function renderPlanets(){
+  const layer = document.getElementById('planetLayer');
+  layer.innerHTML = '';
+  planets.forEach((p,i)=>{
+    const wrap = document.createElement('div');
+    wrap.className = 'planet-wrap';
+    wrap.style.left = p.x + '%';
+    wrap.style.top = p.y + '%';
+    wrap.style.transform = `scale(${0.78 + p.care*0.05})`;
+    wrap.innerHTML = `<div class="ring"></div><div class="planet" style="--glow:${meta[p.emotions[0]][1]};background:${planetBg(p)}"></div><div class="planet-label">${p.emotions.join(' · ')}</div>`;
+    wrap.onpointerdown = ev => {
+      dragTarget = {el:wrap, p};
+      const rect = wrap.getBoundingClientRect();
+      offset.x = ev.clientX - rect.left;
+      offset.y = ev.clientY - rect.top;
+      wrap.setPointerCapture(ev.pointerId);
+    };
+    wrap.onclick = () => { activePlanet = p; renderInfo(); renderReport(); renderLetter(); };
+    layer.appendChild(wrap);
+  });
+}
+document.addEventListener('pointermove', ev => {
+  if(!dragTarget) return;
+  const area = document.getElementById('galaxyArea').getBoundingClientRect();
+  let x = ((ev.clientX - area.left - offset.x) / area.width) * 100;
+  let y = ((ev.clientY - area.top - offset.y) / area.height) * 100;
+  x = Math.max(4, Math.min(88, x));
+  y = Math.max(8, Math.min(84, y));
+  dragTarget.p.x = x; dragTarget.p.y = y;
+  dragTarget.el.style.left = x + '%';
+  dragTarget.el.style.top = y + '%';
+});
+document.addEventListener('pointerup', ()=> dragTarget = null);
+
+document.getElementById('createBtn').onclick = () => {
+  if(!selected.length){ alert('감정을 먼저 선택해주세요.'); return; }
+  const p = {
+    emotions:[...selected],
+    journal:document.getElementById('journal').value || '짧은 감정 기록이 없습니다.',
+    x:38 + Math.random()*28,
+    y:30 + Math.random()*25,
+    care:1
+  };
+  planets.push(p);
+  activePlanet = p;
+  selected = [];
+  document.querySelectorAll('.emotion').forEach(b=>b.classList.remove('active'));
+  document.getElementById('journal').value = '';
+  renderPlanets(); renderInfo(); renderReport(); renderLetter();
+};
+
+function renderInfo(){
+  const box = document.getElementById('planetInfo');
+  if(!activePlanet) return;
+  box.innerHTML = `<h3>${activePlanet.emotions.join(' · ')}</h3>
+  <div class="chips">${activePlanet.emotions.map(e=>`<span class="chip">${e}</span>`).join('')}</div>
+  <p class="subtitle">${activePlanet.journal}</p>
+  <p><b>진화 단계:</b> Lv.${activePlanet.care}</p>
+  <button class="primary" onclick="goVillage()">행성 가꾸기</button>`;
+}
+function goVillage(){
+  switchView('village');
+}
+function decorate(type){
+  if(activePlanet) activePlanet.care++;
+  document.getElementById('decorateMsg').textContent = `${type}를 추가했어요. 행성이 조금 더 따뜻해졌습니다.`;
+  renderPlanets(); renderReport(); renderLetter();
+}
+function renderReport(){
+  document.getElementById('countStat').textContent = planets.length;
+  const counts = {};
+  planets.forEach(p=>p.emotions.forEach(e=>counts[e]=(counts[e]||0)+1));
+  const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('mainStat').textContent = sorted[0]?.[0] || '-';
+  document.getElementById('careStat').textContent = 'Lv.' + (activePlanet?.care || 1);
+  document.getElementById('bars').innerHTML = sorted.map(([e,c])=>`
+    <div><b>${e}</b> <span class="subtitle">${c}회</span>
+    <div class="bar"><div class="fill" style="width:${Math.min(100,c*25)}%;background:linear-gradient(90deg,${meta[e].join(',')})"></div></div></div>
+  `).join('');
+  document.getElementById('reportText').textContent = sorted.length ? `최근 기록에서는 ${sorted.slice(0,3).map(v=>v[0]).join(', ')} 감정이 자주 등장했어요. 반복되는 감정은 마음이 보내는 패턴 신호일 수 있습니다.` : '';
+}
+function renderLetter(){
+  const title = document.getElementById('letterTitle');
+  const text = document.getElementById('letterText');
+  if(!activePlanet) return;
+  title.textContent = `${activePlanet.emotions.join(' · ')} 행성에게`;
+  text.textContent = `오늘의 행성에는 ${activePlanet.emotions.join(', ')}의 색이 함께 담겨 있어요. 이 감정들은 당신을 방해하는 것이 아니라, 지금의 상태를 알려주는 작은 신호일 수 있어요. 감정을 없애려 하기보다 이렇게 바라봐준 것만으로도 충분히 좋은 시작입니다.`;
+}
+document.querySelectorAll('.tabs button').forEach(btn=>{
+  btn.onclick = () => switchView(btn.dataset.view);
+});
+function switchView(id){
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('active', b.dataset.view===id));
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active', s.id===id));
+}
+for(let i=0;i<130;i++){
+  const s=document.createElement('div');
+  s.className='star';
+  s.style.left=Math.random()*100+'%';
+  s.style.top=Math.random()*100+'%';
+  s.style.opacity=Math.random()*.8+.2;
+  document.querySelector('.galaxy').appendChild(s);
+}
+renderPlanets(); renderInfo(); renderReport(); renderLetter();
+</script>
+</body>
+</html>
