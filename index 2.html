@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>My Emotional Galaxy</title>
+<style>
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:linear-gradient(#050816,#0d1430);
+color:white;
+overflow:hidden;
+}
+.container{
+padding:20px;
+}
+h1{font-size:32px;}
+.galaxy{
+position:relative;
+height:420px;
+border-radius:30px;
+background:radial-gradient(circle at center,#1d2555,#060914);
+overflow:hidden;
+border:1px solid rgba(255,255,255,0.1);
+}
+.orbit{
+position:absolute;
+border:1px solid rgba(255,255,255,0.08);
+border-radius:50%;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+}
+.orbit1{width:220px;height:220px;}
+.orbit2{width:360px;height:360px;}
+.planet{
+position:absolute;
+width:80px;
+height:80px;
+border-radius:50%;
+background:radial-gradient(circle at 30% 30%,#ffd6ff,#7d5cff,#2d1b69);
+box-shadow:0 0 30px #9c7dff;
+cursor:grab;
+}
+.ring{
+position:absolute;
+width:110px;
+height:20px;
+border:2px solid rgba(255,220,180,0.6);
+border-radius:50%;
+top:30px;
+left:-15px;
+transform:rotate(-18deg);
+}
+.panel{
+margin-top:20px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+.card{
+background:rgba(255,255,255,0.05);
+border:1px solid rgba(255,255,255,0.08);
+border-radius:24px;
+padding:20px;
+backdrop-filter:blur(10px);
+}
+.village{
+height:320px;
+border-radius:30px;
+position:relative;
+overflow:hidden;
+background:linear-gradient(#1a2148,#101522);
+}
+.island{
+position:absolute;
+bottom:0;
+left:50%;
+transform:translateX(-50%);
+width:420px;
+height:220px;
+background:#24384a;
+border-radius:50% 50% 20% 20%;
+}
+.house{
+position:absolute;
+bottom:120px;
+left:50%;
+transform:translateX(-50%);
+width:90px;
+height:70px;
+background:#5d4b82;
+border-radius:12px;
+box-shadow:0 0 25px rgba(255,220,140,0.5);
+}
+.window{
+position:absolute;
+width:18px;
+height:18px;
+background:#ffd580;
+top:18px;
+left:36px;
+border-radius:4px;
+}
+.pond{
+position:absolute;
+bottom:45px;
+left:50%;
+transform:translateX(-50%);
+width:150px;
+height:70px;
+background:#5da3d6;
+border-radius:50%;
+box-shadow:0 0 20px rgba(120,200,255,0.4);
+}
+.tree{
+position:absolute;
+width:40px;
+height:40px;
+background:#284d34;
+border-radius:50%;
+}
+.tree1{bottom:130px;left:110px;}
+.tree2{bottom:135px;right:110px;}
+button{
+padding:14px 24px;
+border:none;
+border-radius:18px;
+background:#6b5cff;
+color:white;
+font-weight:bold;
+cursor:pointer;
+margin-top:10px;
+}
+.small{
+opacity:0.7;
+font-size:14px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>My Emotional Galaxy</h1>
+<p class="small">스토리보드 스타일 감정 행성 & 감정 마을 프로토타입</p>
+
+<div class="galaxy" id="galaxy">
+<div class="orbit orbit1"></div>
+<div class="orbit orbit2"></div>
+
+<div class="planet" id="planet1" style="left:48%;top:42%;">
+<div class="ring"></div>
+</div>
+
+<div class="planet" style="left:22%;top:24%;width:55px;height:55px;background:radial-gradient(circle at 30% 30%,#ffd0b0,#ff7b7b,#6a2233);"></div>
+
+<div class="planet" style="left:72%;top:60%;width:65px;height:65px;background:radial-gradient(circle at 30% 30%,#d0ffd6,#62c7b0,#184d44);"></div>
+</div>
+
+<div class="panel">
+<div class="card">
+<h2>오늘의 감정 행성</h2>
+<p>불안 · 피로감 · 외로움</p>
+<button onclick="alert('감정 행성이 은하에 저장되었습니다!')">은하에 저장하기</button>
+</div>
+
+<div class="card">
+<h2>행성 가꾸기</h2>
+<div class="village">
+<div class="island"></div>
+<div class="pond"></div>
+<div class="house">
+<div class="window"></div>
+</div>
+<div class="tree tree1"></div>
+<div class="tree tree2"></div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+const planet=document.getElementById('planet1');
+let dragging=false,offsetX=0,offsetY=0;
+
+planet.addEventListener('mousedown',(e)=>{
+dragging=true;
+offsetX=e.offsetX;
+offsetY=e.offsetY;
+planet.style.cursor='grabbing';
+});
+
+document.addEventListener('mousemove',(e)=>{
+if(!dragging)return;
+const rect=document.getElementById('galaxy').getBoundingClientRect();
+let x=e.clientX-rect.left-offsetX;
+let y=e.clientY-rect.top-offsetY;
+
+x=Math.max(20,Math.min(rect.width-100,x));
+y=Math.max(20,Math.min(rect.height-100,y));
+
+planet.style.left=x+'px';
+planet.style.top=y+'px';
+});
+
+document.addEventListener('mouseup',()=>{
+dragging=false;
+planet.style.cursor='grab';
+});
+</script>
+</body>
+</html>
