@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>토닥토닥해조 - 감정 은하 프로토타입</title>
+  <style>
+    :root{--bg:#050716;--card:rgba(255,255,255,.09);--line:rgba(255,255,255,.14);--text:#fff;--muted:#aeb6ca;--accent:#8b7cff}
+    *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at 20% 5%,#273066 0,#050716 36%,#02030b 100%);color:var(--text);min-height:100vh;overflow-x:hidden}.app{max-width:430px;margin:0 auto;min-height:100vh;position:relative;padding:18px 16px 98px}.stars{position:fixed;inset:0;pointer-events:none;opacity:.75}.star{position:absolute;background:#fff;border-radius:50%}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.brand h1{font-size:24px;margin:0}.brand p{font-size:12px;color:var(--muted);margin:4px 0 0}.pill{border:1px solid var(--line);background:rgba(255,255,255,.08);border-radius:999px;padding:8px 12px;font-size:12px;color:#dbe2ff}.card{background:var(--card);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:26px;padding:18px;box-shadow:0 16px 45px rgba(0,0,0,.25)}.section-title{font-size:18px;font-weight:800;margin:0 0 6px}.desc{color:var(--muted);font-size:13px;line-height:1.55;margin:0 0 16px}.chips{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.chip{border:1px solid var(--line);background:rgba(255,255,255,.06);border-radius:18px;padding:12px;color:white;text-align:left;transition:.2s}.chip.active{border-color:white;background:rgba(255,255,255,.18);transform:scale(1.02)}.swatch{height:10px;border-radius:999px;margin-bottom:8px}.chip b{display:block;font-size:14px}.chip span{font-size:11px;color:var(--muted)}textarea{width:100%;height:88px;margin-top:14px;padding:13px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:#fff;resize:none;outline:none}.btn{width:100%;border:0;border-radius:19px;padding:15px;margin-top:12px;font-weight:800;color:#fff;background:linear-gradient(135deg,#6b63ff,#b45cff);box-shadow:0 10px 25px rgba(107,99,255,.3)}.tabs{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);width:min(410px,calc(100% - 24px));display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:rgba(10,12,28,.82);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:24px;padding:8px;z-index:30}.tab{border:0;border-radius:16px;padding:10px 4px;background:transparent;color:#aeb6ca;font-size:12px}.tab.active{background:white;color:#111;font-weight:800}.screen{display:none}.screen.active{display:block}.galaxyBox{height:560px;position:relative;overflow:hidden;margin-top:14px}.orbit{position:absolute;border:1px solid rgba(255,255,255,.06);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%)}.planet{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.35);box-shadow:0 0 18px rgba(255,255,255,.22);animation:pulse 2.5s infinite alternate;cursor:grab;touch-action:none}.planet.dragging{cursor:grabbing;animation:none;z-index:20;filter:brightness(1.2)}.planet:after{content:"";position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(255,255,255,.08)}@keyframes pulse{from{filter:brightness(.9)}to{filter:brightness(1.18)}}.modal{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);width:min(410px,calc(100% - 24px));background:rgba(5,7,22,.92);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:26px;padding:18px;z-index:50;display:none}.modal.show{display:block}.modalTop{display:flex;justify-content:space-between;gap:8px}.close{background:transparent;border:0;color:white;font-size:20px}.miniPlanet{height:58px;border-radius:18px;margin:14px 0}.muted{color:var(--muted);font-size:13px}.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.stat{background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:20px;padding:12px;text-align:center}.stat b{font-size:22px}.bar{height:10px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;border-radius:99px}.timeline{border-left:1px solid var(--line);margin-left:12px;padding-left:20px}.tlitem{position:relative;margin:0 0 16px}.tlitem:before{content:"";position:absolute;left:-31px;top:7px;width:20px;height:20px;border-radius:50%;background:var(--dot);border:1px solid white}.letter{font-size:16px;line-height:1.8}.row{display:flex;gap:8px}.smallBtn{flex:1;border:1px solid var(--line);background:rgba(255,255,255,.07);color:#fff;border-radius:16px;padding:11px;font-weight:700}.smallBtn.active{background:white;color:#111}.hint{font-size:12px;color:#aeb6ca;margin-top:10px;line-height:1.5}
+
+    /* Planet creation process */
+    .creation{position:fixed;inset:0;background:rgba(2,3,12,.92);backdrop-filter:blur(18px);z-index:100;display:none;align-items:center;justify-content:center;padding:18px}.creation.show{display:flex}.creationCard{width:min(390px,100%);min-height:620px;border:1px solid var(--line);background:radial-gradient(circle at 50% 18%,rgba(120,110,255,.22),rgba(255,255,255,.08) 36%,rgba(255,255,255,.05));border-radius:34px;padding:22px;position:relative;overflow:hidden;text-align:center}.creationTitle{font-size:22px;font-weight:900;margin:4px 0 6px}.creationSub{font-size:13px;color:var(--muted);line-height:1.55;margin:0 auto 18px;max-width:300px}.processStage{height:318px;position:relative;margin:10px 0 18px}.emotionOrb{position:absolute;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;border:1px solid rgba(255,255,255,.38);box-shadow:0 0 22px var(--orb);background:var(--orb);left:calc(50% - 32px);top:calc(50% - 32px);opacity:0;transform:scale(.2)}.creation.show .emotionOrb{animation:orbIn 1.2s ease forwards, orbMix 1.45s ease-in-out forwards 1.35s}.emotionOrb:nth-child(1){--dx:-96px;--dy:-86px;animation-delay:.05s,1.35s}.emotionOrb:nth-child(2){--dx:94px;--dy:-62px;animation-delay:.2s,1.35s}.emotionOrb:nth-child(3){--dx:-82px;--dy:86px;animation-delay:.35s,1.35s}.emotionOrb:nth-child(4){--dx:88px;--dy:88px;animation-delay:.5s,1.35s}@keyframes orbIn{0%{opacity:0;transform:translate(0,0) scale(.2)}70%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1.04)}100%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1)}}@keyframes orbMix{0%{transform:translate(var(--dx),var(--dy)) scale(1);opacity:1}100%{transform:translate(0,0) scale(.25);opacity:.25}}
+    .corePlanet{position:absolute;left:50%;top:50%;width:0;height:0;border-radius:50%;transform:translate(-50%,-50%);opacity:0;border:1px solid rgba(255,255,255,.35)}.creation.show .corePlanet{animation:planetBirth 1.7s cubic-bezier(.2,.9,.2,1) forwards 2.65s}@keyframes planetBirth{0%{width:0;height:0;opacity:0;filter:blur(16px)}40%{opacity:1;filter:blur(2px)}100%{width:156px;height:156px;opacity:1;filter:blur(0);box-shadow:0 0 46px rgba(255,255,255,.35)}}.ring{position:absolute;left:50%;top:50%;width:0;height:0;border:1px solid rgba(255,255,255,.25);border-radius:50%;transform:translate(-50%,-50%) rotate(-18deg);opacity:0}.creation.show .ring{animation:ringShow 1.2s ease forwards 3.6s}@keyframes ringShow{to{width:230px;height:82px;opacity:1}}
+    .processText{min-height:72px;background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:22px;padding:14px;text-align:left}.stepLine{display:none;font-size:13px;line-height:1.5;color:#dce4ff}.creation.show .stepLine.s1{display:block;animation:fadeStep 1.2s ease forwards}.creation.show .stepLine.s2{display:block;opacity:0;animation:fadeStep 1.2s ease forwards 1.3s}.creation.show .stepLine.s3{display:block;opacity:0;animation:fadeStep 1.2s ease forwards 2.6s}.creation.show .stepLine.s4{display:block;opacity:0;animation:fadeStep 1.2s ease forwards 3.8s}@keyframes fadeStep{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.skip{margin-top:14px;background:rgba(255,255,255,.1);border:1px solid var(--line);color:#fff;border-radius:16px;padding:11px 16px;font-weight:700}.creationDone{display:none}.creation.show .creationDone{display:block;opacity:0;animation:fadeStep .8s ease forwards 4.6s}.spark{position:absolute;width:4px;height:4px;border-radius:50%;background:white;left:50%;top:50%;opacity:0}.creation.show .spark{animation:spark 1.4s ease forwards 3s}.spark:nth-of-type(8){--sx:-120px;--sy:-90px}.spark:nth-of-type(9){--sx:110px;--sy:-82px}.spark:nth-of-type(10){--sx:-110px;--sy:104px}.spark:nth-of-type(11){--sx:116px;--sy:96px}.spark:nth-of-type(12){--sx:0px;--sy:-140px}.spark:nth-of-type(13){--sx:0px;--sy:140px}@keyframes spark{0%{opacity:0;transform:translate(0,0) scale(.2)}35%{opacity:1}100%{opacity:0;transform:translate(var(--sx),var(--sy)) scale(1.4)}}
+
+    /* Planet village care mode */
+    .village{position:fixed;inset:0;background:radial-gradient(circle at 50% 10%,rgba(50,60,120,.88),rgba(2,3,12,.98) 56%,#02030b);z-index:120;display:none;overflow:auto;padding:18px 14px 96px}.village.show{display:block}.villageShell{max-width:430px;margin:0 auto;min-height:100vh}.villageTop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin:4px 0 14px}.villageTitle h2{font-size:25px;margin:0}.villageTitle p{font-size:12px;color:var(--muted);margin:5px 0 0;line-height:1.45}.roundClose{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.1);color:#fff;font-size:22px}.planetWorld{position:relative;height:430px;border-radius:34px;border:1px solid var(--line);background:rgba(255,255,255,.06);overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.45);margin-bottom:14px}.bigPlanet{position:absolute;left:50%;top:58%;width:360px;height:360px;border-radius:50%;transform:translate(-50%,-50%) scale(.86);box-shadow:0 0 70px rgba(255,255,255,.28), inset -35px -40px 70px rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.35);transition:transform .55s ease}.village.show .bigPlanet{animation:zoomPlanet .65s cubic-bezier(.2,.85,.2,1) forwards}@keyframes zoomPlanet{from{transform:translate(-50%,-50%) scale(.35);filter:blur(8px)}to{transform:translate(-50%,-50%) scale(.86);filter:blur(0)}}.villageLand{position:absolute;left:50%;top:58%;width:332px;height:332px;transform:translate(-50%,-50%);border-radius:50%;overflow:hidden}.villageLand:after{content:"";position:absolute;inset:0;border-radius:50%;background:linear-gradient(to bottom,transparent 0 42%,rgba(0,0,0,.18) 60%,rgba(0,0,0,.38));pointer-events:none}.building{position:absolute;display:grid;place-items:center;border:1px solid rgba(255,255,255,.24);background:rgba(255,255,255,.18);backdrop-filter:blur(6px);box-shadow:0 8px 18px rgba(0,0,0,.24);transition:.25s;animation:popIn .55s ease both}.building:hover{transform:translateY(-4px) scale(1.04)}@keyframes popIn{from{opacity:0;transform:translateY(18px) scale(.7)}to{opacity:1;transform:translateY(0) scale(1)}}.house{width:45px;height:42px;border-radius:13px 13px 10px 10px}.tree{width:36px;height:48px;border-radius:22px 22px 14px 14px}.lake{width:68px;height:34px;border-radius:50%;background:rgba(140,210,255,.45)}.lamp{width:22px;height:48px;border-radius:18px;background:rgba(255,238,170,.55)}.garden{width:58px;height:42px;border-radius:22px;background:rgba(120,230,160,.35)}.path{position:absolute;left:50%;top:58%;width:210px;height:96px;border:2px dashed rgba(255,255,255,.24);border-top:0;border-left:0;border-radius:0 0 999px 0;transform:translate(-50%,-20%) rotate(15deg);opacity:.8}.carePanel{background:rgba(255,255,255,.09);border:1px solid var(--line);border-radius:28px;padding:16px;margin-bottom:14px}.careGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.careAction{border:1px solid var(--line);background:rgba(255,255,255,.07);color:white;border-radius:20px;padding:13px;text-align:left;min-height:82px}.careAction b{display:block;font-size:15px;margin-bottom:4px}.careAction span{font-size:12px;color:var(--muted);line-height:1.35}.villageStats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}.villageStat{border:1px solid var(--line);background:rgba(255,255,255,.06);border-radius:18px;padding:10px;text-align:center}.villageStat b{font-size:20px}.villageLog{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:22px;padding:13px;color:#dfe6ff;font-size:13px;line-height:1.5;min-height:58px}.floatHeart{position:absolute;font-size:22px;left:50%;top:50%;pointer-events:none;animation:floatHeart 1.1s ease forwards}@keyframes floatHeart{from{opacity:0;transform:translate(-50%,0) scale(.6)}30%{opacity:1}to{opacity:0;transform:translate(-50%,-90px) scale(1.25)}}
+
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  <div class="app">
+    <div class="top"><div class="brand"><h1>토닥토닥해조</h1><p>감정을 행성으로 기록하는 내면 우주</p></div><div class="pill" id="countPill">행성 0개</div></div>
+
+    <section id="make" class="screen active">
+      <div class="card"><h2 class="section-title">오늘의 감정 행성 만들기</h2><p class="desc">감정 키워드 1~4개를 선택하면 색채 심리학 기반으로 하나의 행성이 생성됩니다.</p><div class="chips" id="chips"></div><textarea id="journal" placeholder="오늘의 상황이나 마음을 짧게 적어보세요."></textarea><button class="btn" onclick="createPlanet()">감정 행성 생성하기</button><p class="hint">생성 버튼을 누르면 감정 키워드가 색채 입자로 분해되고, 색이 섞이며 행성으로 태어나는 과정을 볼 수 있어요.</p></div>
+    </section>
+
+    <section id="galaxyScreen" class="screen"><div class="card"><h2 class="section-title">My Emotional Galaxy</h2><p class="desc">행성을 길게 누르거나 드래그하면 궤도 위에서 위치를 옮길 수 있어요. 행성끼리는 겹치지 않게 자동 보정됩니다.</p><div class="galaxyBox" id="galaxyBox"><div class="orbit" style="width:520px;height:520px"></div><div class="orbit" style="width:360px;height:360px"></div><div class="orbit" style="width:210px;height:210px"></div></div></div></section>
+
+    <section id="letter" class="screen"><div class="card"><h2 class="section-title">AI 회고 편지</h2><p class="desc">가장 최근 행성을 바탕으로 오늘의 마음에게 보내는 편지를 생성합니다.</p><div class="miniPlanet" id="letterPlanet"></div><p class="letter" id="letterText"></p></div></section>
+
+    <section id="report" class="screen"><div class="card"><h2 class="section-title">감정 패턴 분석 리포트</h2><p class="desc">1주/1달 단위로 감정 빈도와 흐름을 요약합니다.</p><div class="row"><button class="smallBtn active" id="weekBtn" onclick="setRange('week')">1주</button><button class="smallBtn" id="monthBtn" onclick="setRange('month')">1달</button></div><div class="statgrid"><div class="stat"><b id="entryCount">0</b><br><span class="muted">기록</span></div><div class="stat"><b id="topEmotion">-</b><br><span class="muted">주요</span></div><div class="stat"><b id="avgMix">0</b><br><span class="muted">평균 조합</span></div></div><div id="bars"></div><p class="desc" style="margin-top:16px" id="reportText"></p></div></section>
+
+    <section id="timeline" class="screen"><div class="card"><h2 class="section-title">은하 타임라인</h2><p class="desc">감정 행성이 생성된 순서대로 정서 흐름을 확인합니다.</p><div class="timeline" id="timelineList"></div></div></section>
+  </div>
+
+  <div class="modal" id="modal"><div class="modalTop"><div><div class="muted" id="modalDate"></div><h3 id="modalTitle" style="margin:4px 0 0"></h3></div><button class="close" onclick="closeModal()">×</button></div><div class="miniPlanet" id="modalPlanet"></div><p class="muted" id="modalJournal"></p><p class="letter" id="modalLetter"></p><button class="btn" onclick="openVillage()">행성 마을 가꾸기</button><p class="hint" id="modalStage"></p></div>
+
+  <div class="village" id="village">
+    <div class="villageShell">
+      <div class="villageTop">
+        <div class="villageTitle">
+          <h2 id="villageName">감정 행성 마을</h2>
+          <p id="villageDesc">행성을 확대해 작은 마을처럼 돌보는 공간입니다.</p>
+        </div>
+        <button class="roundClose" onclick="closeVillage()">×</button>
+      </div>
+
+      <div class="planetWorld" id="planetWorld">
+        <div class="bigPlanet" id="bigPlanet"></div>
+        <div class="villageLand" id="villageLand">
+          <div class="path"></div>
+        </div>
+      </div>
+
+      <div class="carePanel">
+        <h3 style="margin:0 0 6px">이 행성을 어떻게 가꿀까요?</h3>
+        <p class="desc" style="margin-bottom:12px">행동을 누르면 마을 오브젝트가 추가되고, 행성이 성장합니다.</p>
+        <div class="careGrid">
+          <button class="careAction" onclick="addVillageItem('house')"><b>🏠 감정 쉼터 짓기</b><span>오늘의 감정을 안전하게 보관해요.</span></button>
+          <button class="careAction" onclick="addVillageItem('tree')"><b>🌳 회복 나무 심기</b><span>회복 루틴을 하나 더해요.</span></button>
+          <button class="careAction" onclick="addVillageItem('lake')"><b>💧 마음 호수 만들기</b><span>감정을 가라앉히는 공간을 만들어요.</span></button>
+          <button class="careAction" onclick="addVillageItem('lamp')"><b>✨ 위로 등불 켜기</b><span>오늘 나에게 필요한 말을 밝혀요.</span></button>
+          <button class="careAction" onclick="addVillageItem('garden')"><b>🌷 감정 정원 가꾸기</b><span>복합 감정을 색으로 피워내요.</span></button>
+          <button class="careAction" onclick="addVillageItem('letter')"><b>💌 회고 편지 남기기</b><span>AI 회고 문장을 마을에 저장해요.</span></button>
+        </div>
+        <div class="villageStats">
+          <div class="villageStat"><b id="vStage">1</b><br><span class="muted">진화 Lv.</span></div>
+          <div class="villageStat"><b id="vCare">0</b><br><span class="muted">가꾸기</span></div>
+          <div class="villageStat"><b id="vItems">0</b><br><span class="muted">마을 요소</span></div>
+        </div>
+      </div>
+      <div class="villageLog" id="villageLog">행성 마을에 들어왔어요. 오늘 마음에 필요한 돌봄 행동을 선택해보세요.</div>
+    </div>
+  </div>
+
+  <div class="creation" id="creation"><div class="creationCard"><div class="creationTitle">감정 행성 생성 중</div><p class="creationSub">선택한 감정이 색채 입자로 변환되고, 서로 섞이며 하나의 행성으로 태어납니다.</p><div class="processStage" id="processStage"><div class="corePlanet" id="corePlanet"></div><div class="ring"></div><i class="spark"></i><i class="spark"></i><i class="spark"></i><i class="spark"></i><i class="spark"></i><i class="spark"></i></div><div class="processText"><div class="stepLine s1">① 감정 키워드를 읽어 색채 신호로 변환합니다.</div><div class="stepLine s2">② 복수 감정의 색을 섞어 오늘의 정서 비율을 만듭니다.</div><div class="stepLine s3">③ 혼합된 색채가 행성의 표면과 분위기로 형성됩니다.</div><div class="stepLine s4">④ 완성된 행성이 은하에 저장됩니다.</div></div><button class="skip" onclick="finishCreation()">바로 은하에 저장하기</button><div class="creationDone">곧 은하로 이동해요 ✦</div></div></div>
+
+  <div class="tabs"><button class="tab active" onclick="show('make',this)">생성</button><button class="tab" onclick="show('galaxyScreen',this)">은하</button><button class="tab" onclick="show('report',this)">리포트</button><button class="tab" onclick="show('timeline',this)">타임라인</button></div>
+
+<script>
+const meta={불안:{c:'#60a5fa',tone:'차가운 청색',ad:'걱정을 작은 단위로 나눠보세요.'},긴장:{c:'#818cf8',tone:'인디고',ad:'가장 작은 첫 행동 하나만 정해보세요.'},평온:{c:'#6ee7b7',tone:'녹색',ad:'지금의 안정감을 만든 루틴을 기록해두세요.'},행복:{c:'#fde68a',tone:'노란빛',ad:'좋았던 순간을 구체적으로 남겨보세요.'},분노:{c:'#f87171',tone:'강한 적색',ad:'분노 아래의 억울함이나 피로를 살펴보세요.'},외로움:{c:'#c084fc',tone:'보라빛',ad:'먼저 나에게 솔직한 한 문장을 남겨보세요.'},무기력:{c:'#94a3b8',tone:'회색빛',ad:'오늘은 회복이 목표여도 괜찮아요.'},설렘:{c:'#f9a8d4',tone:'분홍빛',ad:'기대를 앞으로의 행동 에너지로 연결해보세요.'}};
+let selected=[], planets=[], active=null, range='week', pendingPlanet=null, creationTimer=null, drag=null;
+const seed=[['무기력','외로움'],['긴장','불안'],['평온','행복'],['분노','긴장'],['외로움','불안','무기력'],['평온','설렘']];
+function dateAgo(n){let d=new Date();d.setDate(d.getDate()-n);return d.toISOString()}
+function gradient(es){return `linear-gradient(135deg,${es.map(e=>meta[e].c).join(',')})`}
+function fmt(iso){return new Date(iso).toLocaleDateString('ko-KR',{month:'long',day:'numeric'})}
+function getRadii(){const w=galaxyBox.clientWidth||398;return [Math.min(72,w/2-78),Math.min(122,w/2-52),Math.min(172,w/2-28)].map(x=>Math.max(58,x))}
+function center(){return {x:(galaxyBox.clientWidth||398)/2,y:(galaxyBox.clientHeight||560)/2}}
+function planetSize(p){return Math.min(46,(p.size||32)+(p.stage||1)*3)}
+function posFor(p){const c=center(), r=getRadii()[p.orbit||0]||getRadii()[0], a=p.angle||0;return {x:c.x+Math.cos(a)*r,y:c.y+Math.sin(a)*r}}
+function distance(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
+function wouldOverlap(candidate, ignoreId=null){const cp=posFor(candidate), cs=planetSize(candidate);return planets.some(p=>{if(p.id===ignoreId)return false;const pp=posFor(p), ps=planetSize(p);return distance(cp,pp)<(cs+ps)/2+14})}
+function assignOrbitPosition(p){const radii=getRadii();for(let orbit=0;orbit<radii.length;orbit++){for(let i=0;i<28;i++){const angle=(-Math.PI/2)+(i*(Math.PI*2/28))+orbit*.31;const cand={...p,orbit,angle};if(!wouldOverlap(cand,p.id)){p.orbit=orbit;p.angle=angle;return p}}}p.orbit=planets.length%3;p.angle=(planets.length*0.92)%(Math.PI*2);return p}
+function nearestOrbitAndAngle(clientX,clientY){const rect=galaxyBox.getBoundingClientRect(), c={x:rect.width/2,y:rect.height/2};const x=clientX-rect.left,y=clientY-rect.top;const dx=x-c.x,dy=y-c.y;const angle=Math.atan2(dy,dx);const r=Math.hypot(dx,dy), radii=getRadii();let orbit=0,best=Infinity;radii.forEach((rr,i)=>{const diff=Math.abs(rr-r);if(diff<best){best=diff;orbit=i}});return {orbit,angle}}
+function safeMovePlanet(p, orbit, angle){let best={...p,orbit,angle};if(!wouldOverlap(best,p.id)){p.orbit=orbit;p.angle=angle;return true}for(let step=1;step<=18;step++){for(const dir of [1,-1]){const cand={...p,orbit,angle:angle+dir*step*0.12};if(!wouldOverlap(cand,p.id)){p.orbit=orbit;p.angle=cand.angle;return true}}}return false}
+function init(){for(let i=0;i<90;i++){let s=document.createElement('i');s.className='star';s.style.cssText=`width:${Math.random()*2+1}px;height:${Math.random()*2+1}px;left:${Math.random()*100}%;top:${Math.random()*100}%`;stars.appendChild(s)};Object.keys(meta).forEach(e=>{let b=document.createElement('button');b.className='chip';b.onclick=()=>toggle(e,b);b.innerHTML=`<div class="swatch" style="background:${meta[e].c}"></div><b>${e}</b><span>${meta[e].tone}</span>`;chips.appendChild(b)});seed.forEach((es,i)=>{let p={id:Date.now()+i,emotions:es,journal:['해야 할 일은 많은데 마음이 움직이지 않았다.','발표 준비 때문에 머리가 복잡했다.','오랜만에 산책하고 음악을 들었다.','예상치 못한 피드백에 예민해졌다.','친구들과 있어도 조금 붕 떠 있었다.','팀 회의 후 아이디어가 정리되어 기대됐다.'][i],date:dateAgo([27,23,19,15,11,6][i]),stage:1,care:0,size:27+Math.random()*8,village:[]};assignOrbitPosition(p);planets.push(p)});renderAll();window.addEventListener('resize',renderGalaxy)}
+function toggle(e,b){if(selected.includes(e)){selected=selected.filter(x=>x!==e);b.classList.remove('active')}else if(selected.length<4){selected.push(e);b.classList.add('active')}}
+function makePlanetFromSelection(){let p={id:Date.now(),emotions:[...selected],journal:journal.value,date:new Date().toISOString(),stage:1,care:0,size:28+Math.random()*8,village:[]};assignOrbitPosition(p);return p}
+function createPlanet(){if(!selected.length)return alert('감정을 하나 이상 선택해줘!');pendingPlanet=makePlanetFromSelection();startCreationAnimation(pendingPlanet)}
+function startCreationAnimation(p){clearTimeout(creationTimer);processStage.querySelectorAll('.emotionOrb').forEach(x=>x.remove());p.emotions.forEach(e=>{let orb=document.createElement('div');orb.className='emotionOrb';orb.style.setProperty('--orb',meta[e].c);orb.textContent=e;processStage.prepend(orb)});corePlanet.style.background=gradient(p.emotions);creation.classList.remove('show');void creation.offsetWidth;creation.classList.add('show');creationTimer=setTimeout(finishCreation,5600)}
+function finishCreation(){if(!pendingPlanet)return;clearTimeout(creationTimer);creation.classList.remove('show');assignOrbitPosition(pendingPlanet);planets.push(pendingPlanet);active=pendingPlanet;pendingPlanet=null;selected=[];journal.value='';document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));renderAll();show('galaxyScreen',document.querySelectorAll('.tab')[1]);openModal(active)}
+function renderAll(){countPill.textContent=`행성 ${planets.length}개`;renderGalaxy();renderLetter();renderReport();renderTimeline()}
+function renderGalaxy(){galaxyBox.innerHTML='<div class="orbit" style="width:344px;height:344px"></div><div class="orbit" style="width:244px;height:244px"></div><div class="orbit" style="width:144px;height:144px"></div>';planets.forEach(p=>{let d=document.createElement('div');d.className='planet';const xy=posFor(p), sz=planetSize(p);d.style.cssText=`left:${xy.x-sz/2}px;top:${xy.y-sz/2}px;width:${sz}px;height:${sz}px;background:${gradient(p.emotions)}`;d.dataset.id=p.id;d.addEventListener('pointerdown',ev=>startDrag(ev,p,d));galaxyBox.appendChild(d)})}
+function startDrag(ev,p,el){ev.preventDefault();drag={p,el,startX:ev.clientX,startY:ev.clientY,moved:false};el.classList.add('dragging');el.setPointerCapture(ev.pointerId);el.addEventListener('pointermove',onDrag);el.addEventListener('pointerup',endDrag);el.addEventListener('pointercancel',endDrag)}
+function onDrag(ev){if(!drag)return;drag.moved=true;const next=nearestOrbitAndAngle(ev.clientX,ev.clientY);safeMovePlanet(drag.p,next.orbit,next.angle);const xy=posFor(drag.p), sz=planetSize(drag.p);drag.el.style.left=(xy.x-sz/2)+'px';drag.el.style.top=(xy.y-sz/2)+'px'}
+function endDrag(ev){if(!drag)return;const {p,el,moved,startX,startY}=drag;el.classList.remove('dragging');el.removeEventListener('pointermove',onDrag);el.removeEventListener('pointerup',endDrag);el.removeEventListener('pointercancel',endDrag);drag=null;renderGalaxy();if(!moved || Math.hypot(ev.clientX-startX,ev.clientY-startY)<6) openModal(p)}
+function letterFor(p){if(!p)return '행성을 생성하면 AI 회고 편지가 나타나요.';let main=p.emotions[0];return `오늘의 행성에는 ${p.emotions.join(', ')}의 색이 함께 담겨 있어요. 이 감정은 당신이 약해서 생긴 것이 아니라 하루를 살아내며 마음이 보내는 신호에 가까워요. ${main}을 알아차린 것만으로도 감정은 조금 더 다룰 수 있는 형태가 됩니다. ${meta[main].ad}`}
+function renderLetter(){let p=planets[planets.length-1];letterPlanet.style.background=p?gradient(p.emotions):'rgba(255,255,255,.1)';letterText.textContent=letterFor(p)}
+function filtered(){let n=range==='week'?7:30,t=new Date();t.setDate(t.getDate()-n);return planets.filter(p=>new Date(p.date)>=t)}
+function counts(items){let c={};items.forEach(p=>p.emotions.forEach(e=>c[e]=(c[e]||0)+1));return Object.entries(c).sort((a,b)=>b[1]-a[1])}
+function setRange(r){range=r;weekBtn.classList.toggle('active',r==='week');monthBtn.classList.toggle('active',r==='month');renderReport()}
+function renderReport(){let f=filtered(), cs=counts(f);entryCount.textContent=f.length;topEmotion.textContent=cs[0]?.[0]||'-';avgMix.textContent=f.length?(f.reduce((s,p)=>s+p.emotions.length,0)/f.length).toFixed(1):'0';bars.innerHTML=cs.map(([e,c])=>`<div style="margin:12px 0"><div style="display:flex;justify-content:space-between;font-size:13px"><span>${e}</span><span>${c}회</span></div><div class="bar"><i style="width:${Math.min(100,c*24)}%;background:${meta[e].c}"></i></div></div>`).join('');reportText.textContent=f.length?`이번 ${range==='week'?'1주':'1달'} 동안 ${cs.slice(0,3).map(x=>x[0]).join(', ')} 감정이 두드러졌어요. 반복되는 감정이 어떤 상황에서 나타났는지 살펴보면 마음 관리의 실마리가 될 수 있어요.`:'아직 이 기간의 기록이 부족해요.'}
+function renderTimeline(){timelineList.innerHTML=[...planets].sort((a,b)=>new Date(b.date)-new Date(a.date)).map(p=>`<div class="tlitem" style="--dot:${meta[p.emotions[0]].c}"><b>${fmt(p.date)} · ${p.emotions.join(' · ')}</b><p class="muted">${p.journal||'기록 없음'}</p><p class="hint">행성 Lv.${p.stage} · 가꾸기 ${p.care}회</p></div>`).join('')}
+
+function openVillage(){
+  if(!active)return;
+  closeModal();
+  village.classList.add('show');
+  renderVillage();
+}
+function closeVillage(){
+  village.classList.remove('show');
+  renderAll();
+  if(active) openModal(active);
+}
+function renderVillage(){
+  if(!active)return;
+  villageName.textContent=active.emotions.join(' · ')+' 행성 마을';
+  villageDesc.textContent='색채로 생성된 감정 행성을 확대해 쉼터, 나무, 호수, 등불로 가꾸는 공간입니다.';
+  bigPlanet.style.background=gradient(active.emotions);
+  bigPlanet.style.boxShadow=`0 0 ${60+active.stage*18}px ${meta[active.emotions[0]].c}, inset -35px -40px 70px rgba(0,0,0,.28)`;
+  vStage.textContent=active.stage;
+  vCare.textContent=active.care;
+  vItems.textContent=(active.village||[]).length;
+  villageLand.querySelectorAll('.building').forEach(el=>el.remove());
+  (active.village||[]).forEach((item,i)=>drawVillageItem(item,i));
+}
+function drawVillageItem(item,i){
+  const el=document.createElement('div');
+  const cls=item.type==='letter'?'lamp':item.type;
+  el.className='building '+cls;
+  const icons={house:'🏠',tree:'🌳',lake:'💧',lamp:'✨',garden:'🌷',letter:'💌'};
+  el.textContent=icons[item.type]||'✦';
+  el.style.left=item.x+'%';
+  el.style.top=item.y+'%';
+  el.style.animationDelay=(i*.05)+'s';
+  villageLand.appendChild(el);
+}
+function addVillageItem(type){
+  if(!active)return;
+  if(!active.village) active.village=[];
+  const spots=[
+    [42,34],[55,39],[30,48],[64,53],[45,61],[58,68],[24,62],[70,36],[35,72],[50,48],[62,75],[28,36]
+  ];
+  const spot=spots[active.village.length%spots.length];
+  const item={type,x:spot[0]+(Math.random()*6-3),y:spot[1]+(Math.random()*5-2)};
+  active.village.push(item);
+  active.care++;
+  active.stage=Math.min(4,1+Math.floor(active.care/3));
+  const messages={house:'감정 쉼터가 생겼어요. 오늘의 마음이 잠시 쉬어갈 수 있습니다.',tree:'회복 나무를 심었어요. 작은 회복 루틴이 자라납니다.',lake:'마음 호수가 생겼어요. 복잡한 감정이 조금 가라앉습니다.',lamp:'위로 등불을 켰어요. 어두운 감정에도 관찰할 빛이 생겼습니다.',garden:'감정 정원이 피었어요. 복합 감정도 하나의 풍경이 됩니다.',letter:'회고 편지를 남겼어요. 오늘의 감정이 의미 있는 기록으로 저장됐습니다.'};
+  villageLog.textContent=messages[type]||'마을이 조금 더 자랐어요.';
+  const heart=document.createElement('div');
+  heart.className='floatHeart';
+  heart.textContent= type==='lake'?'💧': type==='lamp'?'✨': type==='letter'?'💌':'💗';
+  planetWorld.appendChild(heart);
+  setTimeout(()=>heart.remove(),1200);
+  renderVillage();
+}
+
+function openModal(p){active=p;modal.classList.add('show');modalDate.textContent=fmt(p.date);modalTitle.textContent=p.emotions.join(' · ');modalPlanet.style.background=gradient(p.emotions);modalJournal.textContent=p.journal||'기록 없음';modalLetter.textContent=letterFor(p);modalStage.textContent=`현재 행성 진화 Lv.${p.stage}`}
+function closeModal(){modal.classList.remove('show')}
+function careActive(){openVillage()}
+function show(id,btn){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');if(id==='letter')renderLetter();if(id==='report')renderReport();if(id==='timeline')renderTimeline();if(id==='galaxyScreen')setTimeout(renderGalaxy,50)}
+init();
+</script>
+</body>
+</html>
